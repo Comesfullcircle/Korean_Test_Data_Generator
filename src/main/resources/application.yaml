@@ -1,3 +1,18 @@
+debug: false
+
+logging:
+  level:
+    com.seol.koreantestdatagenerator: debug
+    org.springframework.web.service: debug
+
+
 spring:
-  application:
-    name: Korean_Test_Data_Generator
+  application.name: Korean_Test_Data_Generator
+  jpa:
+    open-in-view: false
+    defer-datasource-initialization: true
+    hibernate.ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+  sql.init.mode: always
