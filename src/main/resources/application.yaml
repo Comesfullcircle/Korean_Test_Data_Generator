@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: Korean_Test_Data_Generator
