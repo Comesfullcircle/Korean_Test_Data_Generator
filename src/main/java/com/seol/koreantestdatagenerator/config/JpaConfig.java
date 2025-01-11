@@ -13,6 +13,6 @@ public class JpaConfig {
 
     @Bean
     public AuditorAware<String> auditorAware() {
-        return () -> Optional.of("come");
+        return () -> Optional.of("com");
     }
 }
