@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.*;
 @Import(JpaRepositoryTest.TestJpaConfig.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
-public class JpaRepositoryTest {
+class JpaRepositoryTest {
 
     private static final String TEST_AUDITOR = "test_seol";
 
