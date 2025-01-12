@@ -16,8 +16,17 @@ import java.util.*;
  */
 @Getter
 @ToString(callSuper = true)
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"userId", "schemaName"})
+        },
+        indexes = {
+                @Index(columnList = "createdAt"),
+                @Index(columnList = "modifiedAt")
+        }
+)
 @Entity
-public class TableSchema extends AuditingFields{
+public class TableSchema extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +38,10 @@ public class TableSchema extends AuditingFields{
     @Setter private LocalDateTime exportedAt;
 
     @ToString.Exclude
+    @OrderBy("fieldOrder ASC")
     @OneToMany(mappedBy = "tableSchema", cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<SchemaField> schemaFields = new LinkedHashSet<>();
+
 
     protected TableSchema() {}
 
@@ -44,11 +55,12 @@ public class TableSchema extends AuditingFields{
         return new TableSchema(schemaName, userId);
     }
 
-    public void markExported(){
+
+    public void markExported() {
         exportedAt = LocalDateTime.now();
     }
 
-    public boolean isExpected(){
+    public boolean isExported() {
         return exportedAt != null;
     }
 
@@ -67,31 +79,27 @@ public class TableSchema extends AuditingFields{
 
 
     @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (!(object instanceof TableSchema that)) return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TableSchema that)) return false;
 
         if (that.getId() == null) {
-            return Objects.equals(this.getSchemaName(), that.getSchemaName() )&&
+            return Objects.equals(this.getSchemaName(), that.getSchemaName()) &&
                     Objects.equals(this.getUserId(), that.getUserId()) &&
                     Objects.equals(this.getExportedAt(), that.getExportedAt()) &&
                     Objects.equals(this.getSchemaFields(), that.getSchemaFields());
         }
 
         return Objects.equals(this.getId(), that.getId());
-
-       // if (object == null || getClass() != object.getClass()) return false;
-       // TableSchema that = (TableSchema) object;
-       // return Objects.equals(id, that.id) && Objects.equals(schemaName, that.schemaName) && Objects.equals(userId, that.userId) && Objects.equals(exportedAt, that.exportedAt) && Objects.equals(schemaFields, that.schemaFields);
     }
 
     @Override
     public int hashCode() {
         if (getId() == null) {
-            return Objects.hash(this.getSchemaName(), this.getUserId(), this.getExportedAt(), this.getSchemaFields());
+            return Objects.hash(getSchemaName(), getUserId(), getExportedAt(), getSchemaFields());
         }
-        return Objects.hash(getId());
 
-        //return Objects.hash(id, schemaName, userId, exportedAt, schemaFields);
+        return Objects.hash(getId());
     }
+
 }

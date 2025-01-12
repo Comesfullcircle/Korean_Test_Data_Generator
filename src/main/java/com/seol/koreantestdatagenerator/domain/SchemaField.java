@@ -30,12 +30,13 @@ public class SchemaField extends AuditingFields {
     private TableSchema tableSchema;
 
     @Setter @Column(nullable = false) private String fieldName;
-    @Setter @Column(nullable = false) @Enumerated(EnumType.STRING)  private MockDataType mockDataType;
+    @Setter @Column(nullable = false) @Enumerated(EnumType.STRING) private MockDataType mockDataType;
     @Setter @Column(nullable = false) private Integer fieldOrder;
     @Setter @Column(nullable = false) private Integer blankPercent;
 
     @Setter private String typeOptionJson;
     @Setter private String forceValue;
+
 
     protected SchemaField() {}
 
@@ -52,22 +53,32 @@ public class SchemaField extends AuditingFields {
         return new SchemaField(fieldName, mockDataType, fieldOrder, blankPercent, typeOptionJson, forceValue);
     }
 
+
     @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        SchemaField that = (SchemaField) object;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(fieldName, that.fieldName) &&
-                mockDataType == that.mockDataType &&
-                Objects.equals(fieldOrder, that.fieldOrder) &&
-                Objects.equals(blankPercent, that.blankPercent) &&
-                Objects.equals(typeOptionJson, that.typeOptionJson) &&
-                Objects.equals(forceValue, that.forceValue);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SchemaField that)) return false;
+
+        if (that.getId() == null) {
+            return Objects.equals(this.getTableSchema().getId(), that.getTableSchema().getId()) &&
+                    Objects.equals(this.getMockDataType(), that.getMockDataType()) &&
+                    Objects.equals(this.getFieldName(), that.getFieldName()) &&
+                    Objects.equals(this.getFieldOrder(), that.getFieldOrder()) &&
+                    Objects.equals(this.getBlankPercent(), that.getBlankPercent()) &&
+                    Objects.equals(this.getTypeOptionJson(), that.getTypeOptionJson()) &&
+                    Objects.equals(this.getForceValue(), that.getForceValue());
+        }
+
+        return Objects.equals(this.getId(), that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, fieldName, mockDataType, fieldOrder, blankPercent, typeOptionJson, forceValue);
+        if (getId() == null) {
+            return Objects.hash(getTableSchema().getId(), getMockDataType(), getFieldName(), getFieldOrder(), getBlankPercent(), getTypeOptionJson(), getForceValue());
+        }
+
+        return Objects.hash(getId());
     }
+
 }
