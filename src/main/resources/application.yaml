@@ -4,6 +4,8 @@ logging:
   level:
     com.seol.koreantestdatagenerator: debug
     org.springframework.web.service: debug
+    org.hibernate.orm.jdbc.bind: trace
+    org.springframework.test.context.transaction.TransactionContext: debug
 
 
 spring:
