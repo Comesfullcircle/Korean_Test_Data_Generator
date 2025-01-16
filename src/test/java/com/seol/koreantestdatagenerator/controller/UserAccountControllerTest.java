@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Disabled("테스트 우선 작성함. 테스트로 스펙을 전달하고, 아직 구현이 없으므로 비활성화 프로젝트 #19")
+//@Disabled("테스트 우선 작성함. 테스트로 스펙을 전달하고, 아직 구현이 없으므로 비활성화 프로젝트 #19")
 @DisplayName("[Controller] 회원 컨트롤러 테스트")
 @Import(SecurityConfig.class)
 @WebMvcTest
@@ -27,7 +27,7 @@ record UserAccountControllerTest(@Autowired MockMvc mvc) {
         //When & Then
         mvc.perform(get("/my-account"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("my-account"));
     }
 }

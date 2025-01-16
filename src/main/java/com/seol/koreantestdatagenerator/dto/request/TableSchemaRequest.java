@@ -1,24 +1,24 @@
 package com.seol.koreantestdatagenerator.dto.request;
 
 import com.seol.koreantestdatagenerator.dto.TableSchemaDto;
+import lombok.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record TableSchemaRequest(
-        String schemaName,
-        String userId,
-        List<SchemaFieldRequest> schemaFields
-) {
+@NoArgsConstructor
+@AllArgsConstructor(staticName = "of")
+@Data
+public class TableSchemaRequest {
 
-    public static TableSchemaRequest of(String schemaName, String userId, List<SchemaFieldRequest> schemaFields) {
-        return new TableSchemaRequest(schemaName, userId, schemaFields);
-    }
+    private String schemaName;
+    private String userId;
+    private List<SchemaFieldRequest> schemaFields;
 
     public TableSchemaDto toDto() {
         return TableSchemaDto.of(
-                schemaName(),
-                userId(),
+                schemaName,
+                userId,
                 null,
                 schemaFields.stream()
                         .map(SchemaFieldRequest::toDto)

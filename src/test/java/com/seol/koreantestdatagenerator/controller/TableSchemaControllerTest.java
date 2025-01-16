@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Disabled("테스트 우선 작성함. 테스트로 스펙을 전달하고, 아직 구현이 없으므로 비활성화 프로젝트 #19")
+//@Disabled("테스트 우선 작성함. 테스트로 스펙을 전달하고, 아직 구현이 없으므로 비활성화 프로젝트 #19")
 @DisplayName("[Controller] 테이블 스키마 컨트롤러 테스트")
 @Import({SecurityConfig.class, FormDataEncoder.class})
 @WebMvcTest
@@ -65,6 +65,7 @@ record TableSchemaControllerTest(
                         .with(csrf())
                 )
                 .andExpect(status().is3xxRedirection())
+                .andExpect(flash().attribute("tableSchemaRequest", request))
                 .andExpect(redirectedUrl("/table-schema"));
 
     }
@@ -75,7 +76,7 @@ record TableSchemaControllerTest(
         //Given
 
         //When & Then
-        mvc.perform(get("table-schema/my-schemas"))
+        mvc.perform(get("/table-schema/my-schemas"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("my-schemas"));
