@@ -45,27 +45,13 @@ public class MockData {
         if (this == object) return true;
         if (!(object instanceof MockData that)) return false;
 
-        if(getId() == null) {
+        if(this.getId() == null) {
             return Objects.equals(this.getMockDataType(), that.getMockDataType()) &&
                     Objects.equals(this.getMockDataValue(), that.getMockDataValue());
         }
 
         return Objects.equals(this.getId(), that.getId());
 
-      /*  if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        MockData mockData = (MockData) object;
-
-        if (id ==null) {
-            return Objects.equals(mockDataType, mockData.mockDataType) &&
-                    Objects.equals(mockDataValue, mockData.mockDataValue);
-        }
-
-        return Objects.equals(id, mockData.id);*/
-
-      //  return Objects.equals(id, mockData.id) &&
-      //          mockDataType == mockData.mockDataType &&
-     //           Objects.equals(mockDataValue, mockData.mockDataValue);
     }
 
     @Override
@@ -77,6 +63,6 @@ public class MockData {
 
         return Objects.hash(id);
 
-        //return Objects.hash(id, mockDataType, mockDataValue);
     }
+
 }

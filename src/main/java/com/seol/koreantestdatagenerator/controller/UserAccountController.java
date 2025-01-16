@@ -10,4 +10,5 @@ public class UserAccountController {
     public String myAccount() {
         return "my-account";
     }
+
 }

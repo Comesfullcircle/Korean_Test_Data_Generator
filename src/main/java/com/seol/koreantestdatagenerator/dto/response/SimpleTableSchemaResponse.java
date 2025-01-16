@@ -10,4 +10,5 @@ public record SimpleTableSchemaResponse(
     public static SimpleTableSchemaResponse fromDto(TableSchemaDto dto){
         return new SimpleTableSchemaResponse(dto.schemaName(), dto.userId());
     }
+
 }

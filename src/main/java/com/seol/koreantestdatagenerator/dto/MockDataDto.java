@@ -8,6 +8,7 @@ public record MockDataDto(
         MockDataType mockDataType,
         String mockDataValue
 ) {
+
     public static MockDataDto FromEntity(MockData entity) {
 
         return new MockDataDto(
@@ -16,4 +17,5 @@ public record MockDataDto(
                 entity.getMockDataValue()
         );
     }
+
 }

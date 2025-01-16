@@ -25,7 +25,6 @@ public class FormDataEncoder {
         this.mapper = mapper;
     }
 
-
     /**
      * 데이터를 post form data 형식으로 인코딩한다.
      *

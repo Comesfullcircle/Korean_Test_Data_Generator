@@ -51,13 +51,14 @@ public record SchemaFieldDto(
 
     public SchemaField createEntity() {
         return SchemaField.of(
-                this.fieldName(),
-                this.mockDataType(),
-                this.fieldOrder(),
-                this.blankPercent(),
-                this.typeOptionJson(),
-                this.forceValue()
+                fieldName,
+                mockDataType,
+                fieldOrder,
+                blankPercent,
+                typeOptionJson,
+                forceValue
         );
 
     }
+
 }

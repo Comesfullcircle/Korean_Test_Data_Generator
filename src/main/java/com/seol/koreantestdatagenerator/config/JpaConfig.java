@@ -15,4 +15,5 @@ public class JpaConfig {
     public AuditorAware<String> auditorAware() {
         return () -> Optional.of("com");
     }
+
 }
