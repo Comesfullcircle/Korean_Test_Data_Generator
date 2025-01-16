@@ -1,7 +1,10 @@
 package com.seol.koreantestdatagenerator.dto.request;
 
 import com.seol.koreantestdatagenerator.dto.TableSchemaDto;
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,4 +28,5 @@ public class TableSchemaRequest {
                         .collect(Collectors.toUnmodifiableSet())
         );
     }
+
 }

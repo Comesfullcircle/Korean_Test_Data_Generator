@@ -13,7 +13,6 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("[Repository] 테이블 스키마 쿼리 테스트")
 @ActiveProfiles("test")
@@ -23,14 +22,15 @@ class TableSchemaRepositoryTest {
 
     @Autowired private TableSchemaRepository sut;
 
-    @DisplayName("사용자별 테이블 스키마를 조회하면, 페이징된 테이블 스키마를 반환한다.")
+    @DisplayName("사용자 식별자와 페이징 정보가 주어지면, 페이징된 테이블 스키마 목록을 반환한다.")
     @Test
-    void givenUserId_whenSelectingTableSchemas_thenReturnPagedTableSchema(){
+    void givenUserIdAndPagingInfo_whenSelecting_thenReturnsPagedTableSchemas() {
         //Given
         var userId = "seol";
+        var pageable = Pageable.ofSize(5);
 
         //When
-        Page<TableSchema> result = sut.findByUserId(userId, Pageable.ofSize(5));
+        Page<TableSchema> result = sut.findByUserId(userId, pageable);
 
         //Then
         assertThat(result.getContent())
@@ -43,9 +43,9 @@ class TableSchemaRepositoryTest {
 
     }
 
-    @DisplayName("사용자의 테이블 스키마 이름을 조회하면, 테이블 스키마를 반환한다.")
+    @DisplayName("사용자 식별자와 테이블 스키마 이름이 주어지면, 테이블 스키마를 반환한다.")
     @Test
-    void givenUserIdAndSchemaName_whenSelectingTableSchemas_thenReturnTableSchema(){
+    void givenUserIdAndSchemaName_whenSelecting_thenReturnsTableSchema() {
         //Given
         var userId = "seol";
         var schemaName = "test_schema1";
@@ -61,9 +61,9 @@ class TableSchemaRepositoryTest {
 
     }
 
-    @DisplayName("사용자의 테이블 스키마 이름이 주어지면, 테이블 스키마를 삭제한다.")
+    @DisplayName("사용자 식별자와 테이블 스키마 이름이 주어지면, 테이블 스키마를 삭제한다.")
     @Test
-    void givenUserIdAndSchemaName_whenDeletingTableSchema_thenDeletes(){
+    void givenUserIdAndSchemaName_whenDeleting_thenDeletesTableSchema() {
         //Given
         var userId = "seol";
         var schemaName = "test_schema1";
