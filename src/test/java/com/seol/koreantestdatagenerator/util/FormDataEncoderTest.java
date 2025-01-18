@@ -43,10 +43,10 @@ record FormDataEncoderTest(@Autowired FormDataEncoder formDataEncoder) {
         // Then
         assertThat(result).isEqualTo(
                 (
-                        "str=This 'is' \"test\" string." +
+                                "str=This 'is' \"test\" string." +
                                 "&listStr1=[hello,my,friend]" +
                                 "&listStr2=hello,my,friend" +
-//                        "&nullStr=" + // null 파라미터는 제외
+                                // "&nullStr=" + // null 파라미터는 제외
                                 "&number=1234" +
                                 "&floatingNumber=3.14" +
                                 "&bool=false" +
@@ -93,10 +93,10 @@ record FormDataEncoderTest(@Autowired FormDataEncoder formDataEncoder) {
         // Then
         assertThat(result).isEqualTo(
                 (
-                        "str=This 'is' \"test\" string." +
+                                "str=This 'is' \"test\" string." +
                                 "&listStr1=[hello,my,friend]" +
                                 "&listStr2=hello,my,friend" +
-//                        "&nullStr=" + // null 파라미터는 제외
+                                //"&nullStr=" + // null 파라미터는 제외
                                 "&number=1234" +
                                 "&floatingNumber=3.14" +
                                 "&bool=false" +
