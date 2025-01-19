@@ -110,7 +110,7 @@ record TableSchemaControllerTest(
         mvc.perform(get("/table-schema/my-schemas"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(model().attributeExists("tableSchema"))
+                .andExpect(model().attributeExists("tableSchemas"))
                 .andExpect(view().name("my-schemas"));
     }
 
@@ -126,7 +126,7 @@ record TableSchemaControllerTest(
                         .with(csrf())
         )
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/my-schemas"));
+                .andExpect(redirectedUrl("/table-schema/my-schemas"));
     }
 
     @DisplayName("[GET] 테이블 스키마 파일 다운로드 (정상)")
