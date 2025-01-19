@@ -66,7 +66,7 @@ public class TableSchemaController {
             @PathVariable String schemaName,
             RedirectAttributes redirectAttrs
     ){
-        return "redirect:/my-schemas";
+        return "redirect:/table-schema/my-schemas";
     }
 
     @GetMapping("/table-schema/export")
