@@ -1,7 +1,7 @@
 package com.seol.koreantestdatagenerator.controller;
 
 import com.seol.koreantestdatagenerator.config.SecurityConfig;
-import org.junit.jupiter.api.Disabled;
+import com.seol.koreantestdatagenerator.dto.security.GithubUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//@Disabled("테스트 우선 작성함. 테스트로 스펙을 전달하고, 아직 구현이 없으므로 비활성화 프로젝트 #19")
 @DisplayName("[Controller] 회원 컨트롤러 테스트")
 @Import(SecurityConfig.class)
 @WebMvcTest(UserAccountController.class)
@@ -23,13 +23,17 @@ record UserAccountControllerTest(@Autowired MockMvc mvc) {
     @Test
     void givenAuthenticatedUser_whenRequesting_thenShowsMyAccountView() throws Exception {
         //Given
+        var githubUser = new GithubUser("test-id", "test-name", "test@gmail.com");
 
         //When & Then
-        mvc.perform(get("/my-account"))
+        mvc.perform(
+                get("/my-account")
+                        .with(oauth2Login().oauth2User(githubUser))
+                )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(model().attributeExists("nickname"))
-                .andExpect(model().attributeExists("email"))
+                .andExpect(model().attribute("nickname", githubUser.name()))
+                .andExpect(model().attribute("email", githubUser.email()))
                 .andExpect(view().name("my-account"));
     }
 
