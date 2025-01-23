@@ -9,8 +9,12 @@ import com.seol.koreantestdatagenerator.dto.request.TableSchemaRequest;
 import com.seol.koreantestdatagenerator.dto.response.SchemaFieldResponse;
 import com.seol.koreantestdatagenerator.dto.response.SimpleTableSchemaResponse;
 import com.seol.koreantestdatagenerator.dto.response.TableSchemaResponse;
+import com.seol.koreantestdatagenerator.dto.security.GithubUser;
+import com.seol.koreantestdatagenerator.service.TableSchemaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,14 +31,18 @@ import java.util.List;
 @Controller
 public class TableSchemaController {
 
+    private final TableSchemaService tableSchemaService;
     private final ObjectMapper mapper;
 
     @GetMapping("/table-schema")
     public String tableSchema(
+            @AuthenticationPrincipal GithubUser githubUser,
             @RequestParam(required = false) String schemaName,
             Model model
     ) {
-        var tableSchema = defaultTableSchema(schemaName);
+        TableSchemaResponse tableSchema = (githubUser != null && schemaName != null) ?
+                TableSchemaResponse.fromDto(tableSchemaService.loadMySchema(githubUser.id(), schemaName)) :
+                defaultTableSchema(schemaName);
 
         model.addAttribute("tableSchema", tableSchema);
         model.addAttribute("mockDataTypes", MockDataType.toObjects());
@@ -43,31 +51,33 @@ public class TableSchemaController {
         return "table-schema";
     }
 
-
     @PostMapping("/table-schema")
     public String createOrUpdateTableSchema(
             TableSchemaRequest tableSchemaRequest,
             RedirectAttributes redirectAttrs
-    ){
+    ) {
         redirectAttrs.addFlashAttribute("tableSchemaRequest", tableSchemaRequest);
 
         return "redirect:/table-schema";
     }
 
     @GetMapping("/table-schema/my-schemas")
-    public String mySchemas(Model model){
-        var tableSchemas = mySampleSchemas();
+    public String mySchemas(
+            @AuthenticationPrincipal GithubUser githubUser,
+            Model model
+    ) {
+        List<SimpleTableSchemaResponse> tableSchemas = tableSchemaService.loadMySchemas(githubUser.id())
+                .stream()
+                .map(SimpleTableSchemaResponse::fromDto)
+                .toList();
 
         model.addAttribute("tableSchemas", tableSchemas);
 
         return "my-schemas";
     }
-    
+
     @PostMapping("/table-schema/my-schemas/{schemaName}")
-    public String deleteMySchema(
-            @PathVariable String schemaName,
-            RedirectAttributes redirectAttrs
-    ){
+    public String deleteMySchema(@PathVariable String schemaName) {
         return "redirect:/table-schema/my-schemas";
     }
 
@@ -75,14 +85,15 @@ public class TableSchemaController {
     public ResponseEntity<String> exportTableSchema(TableSchemaExportRequest tableSchemaExportRequest) {
 
         return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=table-schema.txt")
-                .body(json(tableSchemaExportRequest)); //TODO: 나중에 데이터 바꾸기
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=table-schema.txt")
+                .body(json(tableSchemaExportRequest)); // TODO: 나중에 데이터 바꿔야 함
     }
 
-    private static TableSchemaResponse defaultTableSchema(String schemaName) {
+
+    private TableSchemaResponse defaultTableSchema(String schemaName) {
         return new TableSchemaResponse(
                 schemaName != null ? schemaName : "schema_name",
-                "seol",
+                "Seol",
                 List.of(
                         new SchemaFieldResponse("id", MockDataType.ROW_NUMBER, 1, 0, null, null),
                         new SchemaFieldResponse("name", MockDataType.NAME, 2, 10, null, null),
@@ -92,18 +103,10 @@ public class TableSchemaController {
         );
     }
 
-    private static List<SimpleTableSchemaResponse> mySampleSchemas() {
-        return List.of(
-                new SimpleTableSchemaResponse("schema_name1", "Seol", LocalDate.of(2025, 1, 18).atStartOfDay()),
-                new SimpleTableSchemaResponse("schema_name2", "Seol", LocalDate.of(2025, 1, 19).atStartOfDay()),
-                new SimpleTableSchemaResponse("schema_name3", "Seol", LocalDate.of(2025, 1, 20).atStartOfDay())
-        );
-    }
-
-    private String json(Object object){
+    private String json(Object object) {
         try {
             return mapper.writeValueAsString(object);
-        }catch (JsonProcessingException jpe){
+        } catch (JsonProcessingException jpe) {
             throw new RuntimeException(jpe);
         }
     }
