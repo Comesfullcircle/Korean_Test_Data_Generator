@@ -22,6 +22,12 @@ spring:
     properties:
       hibernate.format_sql: true
   sql.init.mode: always
+  security.oauth2.client:
+    registration:
+      github:
+        client-id: ${GITHUB_OAUTH_CLIENT_ID}
+        client-secret: ${GITHUB_OAUTH_CLIENT_PW}
+
 
 ---
 
