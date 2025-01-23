@@ -41,7 +41,12 @@ public class TableSchemaService {
     //작성 참고
     //public void: 작업만 수행하고 반환값이 필요 없을 때 사용.
    // public <반환 타입>: 작업 결과를 반환하거나, 호출자에게 결과를 제공해야 할 때 사용.
-    public void saveMySchema(TableSchemaDto dto){
-        tableSchemaRepository.save(dto.createEntity());
+    //Upsert는 "Update"와 "Insert"의 결합된 단어로, 데이터베이스 작업에서 "존재하면 업데이트, 존재하지 않으면 삽입"의 의미
+    public void upsertTableSchema(TableSchemaDto dto){
+       tableSchemaRepository.findByUserIdAndSchemaName(dto.userId(), dto.schemaName())
+               .ifPresentOrElse(
+                       entity -> tableSchemaRepository.save(dto.updateEntity(entity)),
+                       () -> tableSchemaRepository.save(dto.createEntity())
+               );
     }
 }
