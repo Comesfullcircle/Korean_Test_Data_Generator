@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,9 +52,12 @@ public class TableSchemaController {
 
     @PostMapping("/table-schema")
     public String createOrUpdateTableSchema(
+            @AuthenticationPrincipal GithubUser githubUser,
             TableSchemaRequest tableSchemaRequest,
             RedirectAttributes redirectAttrs
     ) {
+        tableSchemaService.saveMySchema(tableSchemaRequest.toDto(githubUser.id()));
+
         redirectAttrs.addFlashAttribute("tableSchemaRequest", tableSchemaRequest);
 
         return "redirect:/table-schema";
