@@ -2,7 +2,6 @@ package com.seol.koreantestdatagenerator.dto.response;
 
 import com.seol.koreantestdatagenerator.dto.TableSchemaDto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public record TableSchemaResponse(

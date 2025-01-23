@@ -2,7 +2,6 @@ package com.seol.koreantestdatagenerator.dto;
 
 import com.seol.koreantestdatagenerator.domain.TableSchema;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;

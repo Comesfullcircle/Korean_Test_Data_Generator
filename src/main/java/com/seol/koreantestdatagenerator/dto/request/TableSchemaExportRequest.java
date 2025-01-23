@@ -5,7 +5,6 @@ import com.seol.koreantestdatagenerator.dto.TableSchemaDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.aspectj.apache.bcel.classfile.Module;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -3,7 +3,6 @@ package com.seol.koreantestdatagenerator.dto;
 import com.seol.koreantestdatagenerator.domain.SchemaField;
 import com.seol.koreantestdatagenerator.domain.constant.MockDataType;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
