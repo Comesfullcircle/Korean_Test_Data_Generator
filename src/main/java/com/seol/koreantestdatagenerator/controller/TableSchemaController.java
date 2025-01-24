@@ -10,6 +10,7 @@ import com.seol.koreantestdatagenerator.dto.response.SchemaFieldResponse;
 import com.seol.koreantestdatagenerator.dto.response.SimpleTableSchemaResponse;
 import com.seol.koreantestdatagenerator.dto.response.TableSchemaResponse;
 import com.seol.koreantestdatagenerator.dto.security.GithubUser;
+import com.seol.koreantestdatagenerator.service.SchemaExportService;
 import com.seol.koreantestdatagenerator.service.TableSchemaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +32,7 @@ import java.util.List;
 public class TableSchemaController {
 
     private final TableSchemaService tableSchemaService;
+    private final SchemaExportService schemaExportService;
     private final ObjectMapper mapper;
 
     @GetMapping("/table-schema")
@@ -89,12 +91,19 @@ public class TableSchemaController {
     }
 
     @GetMapping("/table-schema/export")
-    public ResponseEntity<String> exportTableSchema(TableSchemaExportRequest tableSchemaExportRequest) {
+    public ResponseEntity<String> exportTableSchema(
+            @AuthenticationPrincipal GithubUser githubUser,
+            TableSchemaExportRequest tableSchemaExportRequest
+    ) {
+        String body = schemaExportService.export(
+                tableSchemaExportRequest.getFileType(),
+                tableSchemaExportRequest.toDto(githubUser != null ? githubUser.id(): null),
+                tableSchemaExportRequest.getRowCount());
         String filename = tableSchemaExportRequest.getSchemaName()+"."+tableSchemaExportRequest.getFileType().name().toLowerCase();
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+filename)
-                .body(json(tableSchemaExportRequest)); // TODO: 나중에 데이터 바꿔야 함
+                .body(body);
     }
 
 
@@ -110,13 +119,4 @@ public class TableSchemaController {
                 )
         );
     }
-
-    private String json(Object object) {
-        try {
-            return mapper.writeValueAsString(object);
-        } catch (JsonProcessingException jpe) {
-            throw new RuntimeException(jpe);
-        }
-    }
-
 }
