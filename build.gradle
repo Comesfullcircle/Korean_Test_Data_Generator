@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.seol'
-version = '0.0.1-SNAPSHOT'
+version = 'v1.0'
 
 java {
     toolchain {
@@ -48,4 +48,11 @@ tasks.withType(JavaCompile) {
 tasks.named('test') {
     useJUnitPlatform()
     jvmArgs('-Xshare:off', '-XX:+EnableDynamicAgentLoading', '--enable-preview')
+}
+
+// Heroku 설정
+jar {
+    manifest {
+        attributes('Main-Class': 'uno.fastcampus.testdata.TestDataApplication')
+    }
 }
