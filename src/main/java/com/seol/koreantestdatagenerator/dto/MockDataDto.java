@@ -9,13 +9,11 @@ public record MockDataDto(
         String mockDataValue
 ) {
 
-    public static MockDataDto FromEntity(MockData entity) {
-
+    public static MockDataDto fromEntity(MockData entity) {
         return new MockDataDto(
                 entity.getId(),
                 entity.getMockDataType(),
                 entity.getMockDataValue()
         );
     }
-
 }
